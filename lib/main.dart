@@ -36,6 +36,8 @@ class _OrderScreenState extends State<OrderScreen> {
   final TextEditingController _notesController = TextEditingController();
   bool _isFootlong = true;
   BreadType _selectedBreadType = BreadType.white;
+  // ignore: unused_field
+  bool _isToasted = false;
 
   @override
   void initState() {
