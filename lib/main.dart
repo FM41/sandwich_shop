@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'views/app_styles.dart';
 import 'repositries/order_repository.dart';
+import 'repositries/pricing_repository.dart';
 
 enum BreadType { white, wheat, wholemeal }
 
@@ -38,6 +39,8 @@ class _OrderScreenState extends State<OrderScreen> {
   BreadType _selectedBreadType = BreadType.white;
   // ignore: unused_field
   bool _isToasted = false;
+  
+  get mainAxisAlignment => null;
 
   @override
   void initState() {
@@ -115,12 +118,25 @@ class _OrderScreenState extends State<OrderScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            OrderItemDisplay(
-              quantity: _orderRepository.quantity,
-              itemType: sandwichType,
-              breadType: _selectedBreadType,
-              orderNote: noteForDisplay,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('untoasted', style: normalText),
+              Switch(
+                value: _isToasted,
+                onChanged: (value) {
+                  setState(() => _isToasted = value);
+                },
+              ),
+              const Text('toasted', style: normalText),
+            ],
+          ),
+          OrderItemDisplay(
+            quantity: _orderRepository.quantity,
+            itemType: sandwichType,
+            breadType: _selectedBreadType,
+            orderNote: noteForDisplay,
+          ),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
