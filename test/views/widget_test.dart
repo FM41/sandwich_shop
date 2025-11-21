@@ -74,6 +74,36 @@ void main() {
           find.textContaining('wholemeal footlong sandwich'), findsOneWidget);
     });
 
+// ...existing code...
+
+  group('OrderScreen - Sandwich Size Switch', () {
+    testWidgets('toggles between six-inch and footlong', (WidgetTester tester) async {
+      await tester.pumpWidget(const App());
+
+      // Initially should show 'footlong'
+      expect(find.textContaining('footlong sandwich'), findsOneWidget);
+
+      // Find the Switch widget and toggle it
+      final switchFinder = find.byType(Switch);
+      expect(switchFinder, findsOneWidget);
+
+      // Tap the switch to change to 'six-inch'
+      await tester.tap(switchFinder);
+      await tester.pumpAndSettle();
+
+      // Now should show 'six-inch'
+      expect(find.textContaining('six-inch sandwich'), findsOneWidget);
+
+      // Tap again to switch back to 'footlong'
+      await tester.tap(switchFinder);
+      await tester.pumpAndSettle();
+
+      // Should show 'footlong' again
+      expect(find.textContaining('footlong sandwich'), findsOneWidget);
+    });
+  });
+
+// ...existing code...
     testWidgets('updates note with TextField', (WidgetTester tester) async {
       await tester.pumpWidget(const App());
       await tester.enterText(
