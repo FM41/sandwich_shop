@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'views/app_styles.dart';
 import 'repositries/order_repository.dart';
+import 'repositries/pricing_repository.dart';
 
 enum BreadType { white, wheat, wholemeal }
 
@@ -94,9 +95,15 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   Widget build(BuildContext context) {
     String sandwichType = 'footlong';
-    if (!_isFootlong) {
-      sandwichType = 'six-inch';
-    }
+    SandwichSize size = _isFootlong
+        ? SandwichSize.footlong
+        : SandwichSize.sixInch;
+
+    final pricing = PricingRepository(
+      sandwichSize: size,
+      quantity: _orderRepository.quantity,
+    );
+    double totalPrice = pricing.getTotalPrice();
 
     String noteForDisplay;
     if (_notesController.text.isEmpty) {
@@ -134,6 +141,11 @@ class _OrderScreenState extends State<OrderScreen> {
             itemType: sandwichType,
             breadType: _selectedBreadType,
             orderNote: noteForDisplay,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Total Price: £${totalPrice.toStringAsFixed(2)}',
+            style: normalText,
           ),
             const SizedBox(height: 20),
             Row(
