@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'views/app_styles.dart';
 import 'repositries/order_repository.dart';
+import 'repositries/pricing_repository.dart';
 
 enum BreadType { white, wheat, wholemeal }
 
@@ -30,7 +31,6 @@ class OrderScreen extends StatefulWidget {
     return _OrderScreenState();
   }
 }
-
 class _OrderScreenState extends State<OrderScreen> {
   late final OrderRepository _orderRepository;
   final TextEditingController _notesController = TextEditingController();
@@ -38,6 +38,8 @@ class _OrderScreenState extends State<OrderScreen> {
   BreadType _selectedBreadType = BreadType.white;
   // ignore: unused_field
   bool _isToasted = false;
+  
+  get mainAxisAlignment => null;
 
   @override
   void initState() {
@@ -93,9 +95,15 @@ class _OrderScreenState extends State<OrderScreen> {
   @override
   Widget build(BuildContext context) {
     String sandwichType = 'footlong';
-    if (!_isFootlong) {
-      sandwichType = 'six-inch';
-    }
+    SandwichSize size = _isFootlong
+        ? SandwichSize.footlong
+        : SandwichSize.sixInch;
+
+    final pricing = PricingRepository(
+      sandwichSize: size,
+      quantity: _orderRepository.quantity,
+    );
+    double totalPrice = pricing.getTotalPrice();
 
     String noteForDisplay;
     if (_notesController.text.isEmpty) {
@@ -115,12 +123,30 @@ class _OrderScreenState extends State<OrderScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            OrderItemDisplay(
-              quantity: _orderRepository.quantity,
-              itemType: sandwichType,
-              breadType: _selectedBreadType,
-              orderNote: noteForDisplay,
-            ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text('untoasted', style: normalText),
+              Switch(
+                value: _isToasted,
+                onChanged: (value) {
+                  setState(() => _isToasted = value);
+                },
+              ),
+              const Text('toasted', style: normalText),
+            ],
+          ),
+          OrderItemDisplay(
+            quantity: _orderRepository.quantity,
+            itemType: sandwichType,
+            breadType: _selectedBreadType,
+            orderNote: noteForDisplay,
+          ),
+          const SizedBox(height: 8),
+          Text(
+            'Total Price: £${totalPrice.toStringAsFixed(2)}',
+            style: normalText,
+          ),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,

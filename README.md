@@ -32,17 +32,20 @@ A cross-platform Flutter application for browsing, customizing, and ordering san
    Follow the [Flutter installation guide](https://docs.flutter.dev/get-started/install) for your platform.
 
 2. **Clone the repository:**
+
    ```sh
    git clone <your-repo-url>
    cd checkout_3
    ```
 
 3. **Install dependencies:**
+
    ```sh
    flutter pub get
    ```
 
 4. **Run the app:**
+
    ```sh
    flutter run
    ```
